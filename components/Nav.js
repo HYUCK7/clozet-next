@@ -11,7 +11,8 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { createSvgIcon } from '@mui/material/utils';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 
 const HomeIcon = createSvgIcon(
@@ -42,19 +43,24 @@ export function Nav(){
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const handleLogout = () => {
+    alert(' 로그아웃 클릭 ')
+    dispatch(logoutRequest());
+  }
 
   const loginUser = useSelector( (state) => state.login.loginUser)
   const isLoggined = useSelector( (state) => state.login.isLoggined)
-
+  const dispatch = useDispatch()
   useEffect(() => {
-    if (!isLoggined) {
+    console.log(' 모듈에 저장된 로그인값: '+JSON.stringify(loginUser))
+    if (loginUser === null) {
       setUserUrls({subTitles: ['회원가입', '로그인'], urls: ["/auth/register","/auth/login"]})
       setImageInfos({imageUrl: 'https://as2.ftcdn.net/v2/jpg/01/85/61/65/1000_F_185616556_uCc1J5d5GNfRH6ErgP1G8x8ORLeG25en.jpg', imageTitle: 'sign'})
     } else {
       setUserUrls({subTitles: ["프로필", "정보수정", "로그아웃" , "회원탈퇴"], urls: ["/user/profile", "/user/modifyUser", "/user/logout", "/user/delUser"]})
       setImageInfos({imageUrl: 'https://www.w3schools.com/howto/img_avatar.png', imageTitle: 'users'})
     }
-  }, [])
+  }, [loginUser && loginUser.name])
   
   return (
     <AppBar position="static" style={{marginBottom:"20px"}}>
@@ -94,6 +100,11 @@ export function Nav(){
                 </MenuItem> ))}
             </Menu>
           </Box>
+          {loginUser && <Box>
+            <Button onClick = {handleLogout}
+            sx = {{color : 'white', display: 'block'}}>로그아웃
+            </Button>
+            </Box>}
         </Toolbar>
       </Container>
     </AppBar>

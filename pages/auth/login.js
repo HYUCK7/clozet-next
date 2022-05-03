@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {connect, useDispatch} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import {loginRequest} from '@/modules/auth/login';
-import {Login} from '@/components';
+import {Login, Profile} from '@/components';
 import {useRouter} from "next/router"
 import { round } from 'lodash';
 
@@ -17,13 +17,18 @@ const LoginPage = ({}) => {
             [name]: value
         })
     }
+    const {isLoggined, loginUser} = useSelector(state => state.login)
     const onSubmit = e => {
         e.preventDefault()
         alert(`로그인 정보 ${JSON.stringify(user)}`)
+        console.log(history)
         dispatch(loginRequest(user))
-        router.push('/user/profile')
+        console.log('모듈에 저장된 로그인값: ' + JSON.stringify(loginUser))
+        // router.push('/user/profile') 이동시 데이터 소실시켜버린다.
     }
-    return (<Login onChange={onChange} onSubmit={onSubmit}/>);
+    return (isLoggined ? 
+        <Profile loginUser={loginUser}/>
+      :<Login onChange={onChange} onSubmit={onSubmit}/>);
 };
 const mapStateToProps = state => ({loginUser: state.login.loginUser})
 const loginActions = {loginRequest}
