@@ -66,19 +66,33 @@ export function Nav(){
     <AppBar position="static" style={{marginBottom:"20px"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+
           <Typography variant="h6" noWrap component="div" sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
             <Box sx={{ '& > :not(style)': { m: 2, }, }}>
               <a href='/'><HomeIcon color="primary" sx={{ my: 0, color: 'white', display: 'block' }}/></a>
             </Box>
           </Typography>
-          
-          <Box sx={{ flexGrow: 1, color: 'white', display: { xs: 'none', md: 'flex' } }}>
-            {basicSettings.urls.map((urls, i) => (
-              <a href={urls} key={i} style = {{textDecoration: 'none'}}><Button key={i} onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }} >
-                {basicSettings.subTitles[i]} </Button>
-              </a>))}
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title={imageInfos.imageTitle}>
+              <IconButton onClick={handleOpenNavMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src={imageInfos.imageUrl}/>
+              </IconButton>
+            </Tooltip>
+          <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{ vertical: 'top', horizontal: 'right', }}
+              keepMounted
+              transformOrigin={{ vertical: 'top', horizontal: 'right', }}
+              open={Boolean(anchorElNav)}
+            >
+              {basicSettings.urls.map((urls, i) => (
+                <MenuItem key={i} >
+                  <a href={urls}><Typography textAlign="center" onClick={handleCloseNavMenu}>{basicSettings.subTitles[i]}</Typography></a>
+                </MenuItem> ))}
+            </Menu>
           </Box>
-          
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title={imageInfos.imageTitle}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
